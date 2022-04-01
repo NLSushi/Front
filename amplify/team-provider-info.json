@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-newsum-staging-135232-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365005647003:role/amplify-newsum-staging-135232-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365005647003:role/amplify-newsum-staging-135232-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-newsum-staging-135232-deployment",
+      "UnauthRoleName": "amplify-newsum-staging-135232-unauthRole",
+      "StackName": "amplify-newsum-staging-135232",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:365005647003:stack/amplify-newsum-staging-135232/a5b4a180-b030-11ec-92dd-024ae9f62a5c",
+      "AmplifyAppId": "dw6ez3267m0k5"
+    },
+    "categories": {
+      "auth": {
+        "NEWSUM": {}
+      }
+    }
+  }
+}

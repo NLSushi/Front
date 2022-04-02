@@ -2,22 +2,17 @@ import React, {useState} from 'react';
 import { View, StyleSheet, Pressable, Image, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const CustomNews = ({ news, category }) => {
+const CustomNews = ({ news, category, horizontal }) => {
 
     const navigation = useNavigation();
-    const [article, setArticle] = useState('');
-
-    function onArticlePressed(id) {
-        navigation.navigate('Detail', {id: id});
-    }
 
     return (
         <ScrollView 
             style={styles.scrollContainer} 
-            horizontal={true} 
+            horizontal={horizontal} 
             showsHorizontalScrollIndicator={false}
         >
-            {news.filter(user => user.category == category).map(user => (
+            {news.filter(user => user.category == category).filter(user => user.id < 10).map(user => (
                 <Pressable  
                     key={user.id} 
                     style={styles.newsContainer}

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import { Controller } from 'react-hook-form';
 
-const CustomInput = ({ control, name, rules = {} , placeholder, secureTextEntry}) => {
+const CustomInput = ({ control, name, rules = {} , placeholder, secureTextEntry, autoFocus}) => {
     return (
         <Controller
             control={control}
@@ -18,6 +18,7 @@ const CustomInput = ({ control, name, rules = {} , placeholder, secureTextEntry}
                             onChangeText={onChange}
                             placeholder={placeholder}
                             secureTextEntry={secureTextEntry}
+                            autoFocus={autoFocus}
                         />
                         {error && (
                         <Text style={{color: '#FD7B7B', fontSize: 12, marginTop: 2}}>{error.message || 'Error'}</Text>

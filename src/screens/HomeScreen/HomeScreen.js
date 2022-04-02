@@ -46,8 +46,7 @@ const HomeScreen = () => {
     }
 
     const onSearchPressed = () => {
-        //navigation.navigate('Search');
-        console.warn('onSearchPressed');
+        navigation.navigate('Search');
     }
 
     const onArticlePressed = () => {
@@ -77,16 +76,19 @@ const HomeScreen = () => {
                     <CustomNews
                         news={news}
                         category="politic"
+                        horizontal={true}
                     />
                     <Text style={styles.categoryHeader}>경제 핫뉴스</Text>
                     <CustomNews
                         news={news}
                         category="economy"
+                        horizontal={true}
                     />
                     <Text style={styles.categoryHeader}>사회 핫뉴스</Text>
                     <CustomNews
                         news={news}
                         category="society"
+                        horizontal={true}
                     />
                 </ScrollView>  
             </View>

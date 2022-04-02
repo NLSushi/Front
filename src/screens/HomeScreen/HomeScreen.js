@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
     },
     categoryHeader: {
-        marginTop: 14,
+        marginTop: 16,
         fontSize: 15,
         fontWeight: '800',
         color: '#FFFFFF'

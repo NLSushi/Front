@@ -9,7 +9,8 @@ import { useForm } from 'react-hook-form';
 
 const SearchScreen = () => {
 
-    const { control, handleSubmit } = useForm();
+    const { control, handleSubmit, watch } = useForm();
+    const keyword = watch('keyword');
 
     const navigation = useNavigation();
 
@@ -22,9 +23,9 @@ const SearchScreen = () => {
     }
 
     const onSearchPressed = (data) => {
+        //console.warn(search);
         const {keyword} = data;
-        console.warn(keyword);
-        //navigation.push('SearchResult', d);
+        navigation.push('SearchResult', {keyword: keyword});
     }
 
     return (
@@ -42,15 +43,13 @@ const SearchScreen = () => {
                     control={control}
                     autoFocus={true}
                 />
-
                 <Pressable 
                     onPress={handleSubmit(onSearchPressed)} 
                     style={styles.searchButton}
                 >
                     <Text>검색</Text>
                 </Pressable>
-
-            </View>
+            </View>      
         </View>
     );
 }

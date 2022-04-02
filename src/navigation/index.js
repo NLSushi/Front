@@ -12,6 +12,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import DetailScreen from '../screens/DetailScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SearchResultScreen from '../screens/SearchResultScreen';
 
 import { Auth, Hub } from 'aws-amplify';
 
@@ -71,6 +72,7 @@ const Navigation = () => {
                     <Stack.Screen name="Search" component={SearchScreen} options={{headerShown: false}} />
                     <Stack.Screen name="MyPage" component={MyPageScreen} options={{headerShown: false}} />
                     <Stack.Screen name="Detail" component={DetailScreen} options={{headerShown: false}} />
+                    <Stack.Screen name="SearchResult" component={SearchResultScreen} options={{headerShown: false}} />
                     </>
                 ) : (
                     <>

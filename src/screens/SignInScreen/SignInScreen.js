@@ -54,42 +54,41 @@ const SignInScreen = () => {
                 <Text style={styles.signInText}>NEWSUM 입니다.</Text>
                 <Text style={styles.signInTextS}>서비스 이용을 위해 로그인 해주세요.</Text>
             </View>
-            <View>
-                <CustomInput
-                    name="username"
-                    placeholder="Username"
-                    control={control}
-                    rules={{
-                        required: 'Username을 입력해주세요'
-                    }}
-                />
-                <CustomInput
-                    name="password"
-                    placeholder="Password"
-                    control={control}
-                    rules={{
-                        required: 'Password is required',
-                        minLength: { value: 8, message: '8자 이상 입력해주세요'}
-                    }}
-                    secureTextEntry
-                />
-                <CustomButton
-                    onPress={handleSubmit(onSignInPressed)}
-                    text="Sign In"
-                />
-                <View style={styles.line}/>
-                <Pressable onPress={onSocialPressed}>
+
+            <CustomInput
+                name="username"
+                placeholder="Username"
+                control={control}
+                rules={{
+                    required: 'Username을 입력해주세요'
+                }}
+            />
+            <CustomInput
+                name="password"
+                placeholder="Password"
+                control={control}
+                rules={{
+                    required: 'Password is required',
+                    minLength: { value: 8, message: '8자 이상 입력해주세요'}
+                }}
+                secureTextEntry
+            />
+            <CustomButton
+                onPress={handleSubmit(onSignInPressed)}
+                text="Sign In"
+            />
+            <View style={styles.line}/>
+            <Pressable onPress={onSocialPressed}>
                 <Image style={styles.image} source={require('../../assets/kakaoLogin.png')} />
+            </Pressable>
+            <View style={styles.otherButtonContainer}>
+                <Pressable onPress={onForgotPasswordPressed}>
+                    <Text style={styles.otherButtonText}>비밀번호 찾기  </Text>
                 </Pressable>
-                <View style={styles.otherButtonContainer}>
-                    <Pressable onPress={onForgotPasswordPressed}>
-                        <Text style={styles.otherButtonText}>비밀번호 찾기  </Text>
-                    </Pressable>
-                    <Text style={styles.otherButtonText}>|</Text>
-                    <Pressable onPress={onSignUpPressed}>
-                        <Text style={styles.otherButtonText}>  회원가입하기</Text>
-                    </Pressable>
-                </View>
+                <Text style={styles.otherButtonText}>|</Text>
+                <Pressable onPress={onSignUpPressed}>
+                    <Text style={styles.otherButtonText}>  회원가입하기</Text>
+                </Pressable>
             </View>
         </View>
     );

@@ -12,7 +12,7 @@ const CustomNews = ({ news, category, horizontal }) => {
             horizontal={horizontal} 
             showsHorizontalScrollIndicator={false}
         >
-            {news.filter(user => user.category == category).filter(user => user.id < 10).map(user => (
+            {news.filter(user => user.category == category).map(user => (
                 <Pressable  
                     key={user.id} 
                     style={styles.newsContainer}

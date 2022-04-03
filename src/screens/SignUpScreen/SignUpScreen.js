@@ -47,7 +47,7 @@ const SignUpScreen = () => {
         <View style={styles.default}>
             <CustomTopbar
                 rightText='X'
-                onPress={onExitPressed}
+                onPressRight={onExitPressed}
             />
             <Text style={styles.signUpText}>회원가입</Text>
 

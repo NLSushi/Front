@@ -27,6 +27,7 @@ const SignInScreen = () => {
         try {
             // aws-amplify 에 있는 username & password -> response
             await Auth.signIn(data.username, data.password);
+            
         } catch(e) {
             // If error occurs,
             Alert.alert('Oops', e.message);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, Alert, Image } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Alert, Image, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomTopbar from '../../components/CustomTopbar';
@@ -13,6 +13,7 @@ const DetailScreen = ({route}) => {
 
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState('');
+    const [heart, setHeart] = useState(false);
 
     const fetchNews = async () => {
         try {
@@ -50,6 +51,10 @@ const DetailScreen = ({route}) => {
         navigation.navigate('MyPage');
     }
 
+    const toggleHeart = () => {
+        setHeart(previousState => !previousState);
+    }
+
     return (
         <View>
             <CustomTopbar
@@ -60,6 +65,9 @@ const DetailScreen = ({route}) => {
             />
 
                 <ScrollView showVerticalScrollIndicator={false}>
+                    <Pressable onPress={toggleHeart}>
+                        {heart ? <Text style={styles.heart}>♡</Text> : <Text style={styles.heart}>♥︎</Text>}
+                    </Pressable>
                     {news.filter(user => user.id == id).map(user => (
                         <View key={user.id} style={styles.artContainer}>
                             <Text style={styles.title}>{user.title}</Text>
@@ -82,9 +90,17 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         backgroundColor: '#FFFFFF'
     },
+    
+    heart: {
+        marginTop: 10,
+        fontSize: 20,
+        paddingHorizontal: 35,
+        color: '#7382B5'
+    },
     artContainer: {
         paddingHorizontal: 35,
-        paddingVertical: 30
+        paddingBottom: 30,
+        paddingTop: 10
     },
     title: {
         fontSize: 18,

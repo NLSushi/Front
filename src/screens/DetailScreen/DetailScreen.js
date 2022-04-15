@@ -53,6 +53,25 @@ const DetailScreen = ({route}) => {
 
     const toggleHeart = () => {
         setHeart(previousState => !previousState);
+        if (heart == true) {
+            Alert.alert(                    // 말그대로 Alert를 띄운다
+                "스크랩 완료",                    // 첫번째 text: 타이틀 제목
+                "기사가 마이페이지에 추가되었습니다.",                         // 두번째 text: 그 밑에 작은 제목
+                [                              // 버튼 배열
+                    { text: "확인" },                                       // 이벤트 발생시 로그를 찍는다
+                ],
+                { cancelable: false }
+            )
+        } else {
+            Alert.alert(                    // 말그대로 Alert를 띄운다
+            "스크랩 취소",                    // 첫번째 text: 타이틀 제목
+            "기사 스크랩이 취소되었습니다.",                         // 두번째 text: 그 밑에 작은 제목
+            [                              // 버튼 배열
+                { text: "확인" },                                       // 이벤트 발생시 로그를 찍는다
+            ],
+            { cancelable: false }
+        )
+        }
     }
 
     return (

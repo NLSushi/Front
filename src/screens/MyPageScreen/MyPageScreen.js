@@ -10,6 +10,7 @@ import { Auth } from 'aws-amplify';
 const MyPageScreen = () => {
 
     const navigation = useNavigation();
+    const [user, setUser] = useState('');
 
     const onBackPressed = () => {
         navigation.goBack();
@@ -23,6 +24,19 @@ const MyPageScreen = () => {
         console.warn('onAccountChangePressed');
     }
 
+    const checkUser = async () => {
+        try {
+            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+            setUser(authUser.username);
+        } catch (e) {
+            setUser(null);
+        }
+    };
+
+    useEffect(() => {
+        checkUser();
+    }, []);
+
     return (
         <View style={styles.default}>
             <CustomTopbar
@@ -31,7 +45,7 @@ const MyPageScreen = () => {
             />
             <View style={styles.container}>
                 <Text style={styles.logo}>NEWSUM</Text>
-                <Text style={styles.welcome}>000님 환영합니다!</Text>
+                <Text style={styles.welcome}>{user}님 환영합니다!</Text>
                 <View style={styles.moreContainer}>
                     <Pressable onPress={onAccountChangePressed}>
                         <Text style={styles.moreText}>회원정보 변경  </Text>

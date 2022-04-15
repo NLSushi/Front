@@ -31,19 +31,15 @@ const SignUpScreen = () => {
                 attributes: {email, preferred_username: username}
             });
 
-            const api = axios.create({
-                baseURL: 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api'
+            axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/signup", {
+                userId: username
             })
-
-            api.post(
-                '/${username}/signup',
-                null,
-                { params: {userId: username}}
-            ).then( function (response) {
-                console.warn(response);
-            }).catch(function (error) {
-                console.warn(error);
+            .then((response) => {
+                console.log(response);
             })
+            .catch((response) => {
+                console.log(response);
+            });
 
             navigation.navigate('ConfirmEmail');
 

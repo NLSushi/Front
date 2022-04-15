@@ -63,15 +63,15 @@ const HomeScreen = () => {
             />
 
             <View style={styles.contentContainer}>
-                <ScrollView showsVerticalScrollIndicator={false} >
-                    <Pressable
+                <Pressable
                     onPress={onSearchPressed}
                     style={styles.searchBar}
                     behavior="padding"
                     enabled
-                    >
-                        <Text>키워드로 검색해보세요</Text>
-                    </Pressable>
+                >
+                    <Text>키워드로 검색해보세요</Text>
+                </Pressable>
+                <ScrollView showsVerticalScrollIndicator={false} > 
                     <Text style={styles.categoryHeader}>정치 핫뉴스</Text>
                     <CustomNews
                         news={news}
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 4,
         paddingHorizontal: 12,
+        marginBottom: 8,
         justifyContent: 'center',
     },
     contentContainer: {

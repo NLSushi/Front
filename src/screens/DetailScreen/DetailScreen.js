@@ -5,6 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTopbar from '../../components/CustomTopbar';
 
 import axios from 'axios'; 
+import { Auth } from 'aws-amplify';
+
+import 'url-search-params-polyfill';
 
 const DetailScreen = ({route}) => {
 
@@ -13,7 +16,8 @@ const DetailScreen = ({route}) => {
 
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState('');
-    const [heart, setHeart] = useState(false);
+    const [heart, setHeart] = useState(true);
+    const [user, setUser] = useState('');
 
     const fetchNews = async () => {
         try {
@@ -27,6 +31,8 @@ const DetailScreen = ({route}) => {
 
             setNews(response.data.data);
 
+            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+            setUser(authUser.username)
             
         } catch (e) {
             Alert.alert('Error', e.message);
@@ -36,8 +42,52 @@ const DetailScreen = ({route}) => {
 
     }
 
+    // 스크랩 상태 불러오기
+    const fetchLike = async () => { 
+
+        try {
+
+            setLoading(true); 
+
+            // userId가 user인 목록
+            // const like = await axios.get(
+            //     'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view',
+            //     {params: {userId: user}}
+            // )
+            // .then(function(response) {
+            //     return response;
+            // })
+            // .then(function(myJson) {
+            //     console.log(JSON.stringify(myJson));
+            // });
+
+            const like = axios.get('url', {
+                params: {
+                    userId: user
+                }
+            })
+            .then((response) => {
+                return response;
+            })
+            .catch((error) => {
+                console.warn(error);
+            }); 
+
+        } catch (e) {
+            Alert.alert('Error', e.message);
+        }
+            
+        setLoading(false);
+
+        // console.warn(like);
+
+        // for 문으로 접근 -> 일치하는 값 있으면 setHeart(true)
+        // if (like.data.data.id === id) setHeart(false) 
+    }
+
     useEffect(() => {
         fetchNews();
+        //fetchLike();
     }, []);
 
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
@@ -51,7 +101,15 @@ const DetailScreen = ({route}) => {
         navigation.navigate('MyPage');
     }
 
+    // heart 를 눌렀을 때 toggle 됨
     const toggleHeart = () => {
+        setHeart(previousState => !previousState);
+        //console.warn(heart);
+        alert()
+    }
+
+    const alert = () => {
+
         if (heart == true) {
             Alert.alert(                    
                 "스크랩 완료",                    
@@ -61,19 +119,31 @@ const DetailScreen = ({route}) => {
                 ],
                 { cancelable: false }
             )
+
             // username 과 article id 서버로 전송
+
+            // var params = new URLSearchParams();
+            // params.append('userId', user);
+
+            // axios.post('url', params)
+            // .then((res) => {
+	        //     console.warn(res);
+            // })
+            // .catch((error) => {
+	        //     console.warn(error);
+            // })
+
         } else {
             Alert.alert(                    
-            "스크랩 취소",                  
-            "기사 스크랩이 취소되었습니다.",                       
-            [                              
-                { text: "확인" },                                       
-            ],
-            { cancelable: false }
-            // username 과 article id 서버에서 삭제
-        )
+                "스크랩 취소",                  
+                "기사 스크랩이 취소되었습니다.",                       
+                [                              
+                    { text: "확인" },                                       
+                ],
+                { cancelable: false }
+                // username 과 article id 서버에서 삭제
+            )
         }
-        setHeart(previousState => !previousState);
     }
 
     return (
@@ -87,7 +157,7 @@ const DetailScreen = ({route}) => {
 
                 <ScrollView showVerticalScrollIndicator={false}>
                     <Pressable onPress={toggleHeart}>
-                        {heart ?  <Text style={styles.heart}>♥︎</Text> : <Text style={styles.heart}>♡</Text>}
+                        {heart ?  <Text style={styles.heart}>♡</Text> : <Text style={styles.heart}>♥︎</Text>}
                     </Pressable>
                     {news.filter(user => user.id == id).map(user => (
                         <View key={user.id} style={styles.artContainer}>

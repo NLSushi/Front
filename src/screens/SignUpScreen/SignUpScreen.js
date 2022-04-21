@@ -36,7 +36,7 @@ const SignUpScreen = () => {
                 userId: username
             }
 
-            axios.post(url,  JSON.stringify(user), {
+            axios.post(url, JSON.stringify(user), {
                 headers: {
                 "Content-Type": `application/json`,
                 },

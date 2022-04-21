@@ -23,7 +23,8 @@
     "react-hook-form": "^7.29.0",
     "react-native": "0.67.4",
     "react-native-gesture-handler": "^2.3.2",
-    "react-native-safe-area-context": "^4.2.4"
+    "react-native-safe-area-context": "^4.2.4",
+    "url-search-params-polyfill": "^8.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

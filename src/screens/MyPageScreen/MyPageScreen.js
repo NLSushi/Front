@@ -11,6 +11,8 @@ const MyPageScreen = () => {
 
     const navigation = useNavigation();
     const [user, setUser] = useState('');
+    const [scrap, setScrap] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const onBackPressed = () => {
         navigation.goBack();
@@ -33,8 +35,29 @@ const MyPageScreen = () => {
         }
     };
 
+    const fetchLike = async () => {
+
+        try {
+
+            setScrap(null);
+            setLoading(true);
+
+            const response = await axios.get(
+                'url',
+                { params: { userId: user}}
+            )
+
+            setScrap(response.data.data);
+
+        } catch (e) {
+            Alert.alert("Error", e.message);
+        }
+
+    }
+
     useEffect(() => {
         checkUser();
+        //fetchLike();
     }, []);
 
     return (
@@ -43,32 +66,40 @@ const MyPageScreen = () => {
                 leftText="❮"
                 onPressLeft={onBackPressed}
             />
-            <View style={styles.container}>
-                <Text style={styles.logo}>NEWSUM</Text>
-                <Text style={styles.welcome}>{user}님 환영합니다!</Text>
-                <View style={styles.moreContainer}>
-                    <Pressable onPress={onAccountChangePressed}>
-                        <Text style={styles.moreText}>회원정보 변경  </Text>
-                    </Pressable>
-                    <Text>•</Text>
-                    <Pressable onPress={onSignOutPressed}>
-                        <Text style={styles.moreText}>  로그아웃</Text>
-                    </Pressable>
-                </View>           
-            </View>
-            <View style={styles.artContainer}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.header}>내가 스크랩한 기사</Text>
+            <ScrollView>
+                <View style={styles.container}>
+                    <Text style={styles.logo}>NEWSUM</Text>
+                    <Text style={styles.welcome}>{user}님 환영합니다!</Text>
+                    <View style={styles.moreContainer}>
+                        <Pressable onPress={onAccountChangePressed}>
+                            <Text style={styles.moreText}>회원정보 변경  </Text>
+                        </Pressable>
+                        <Text>•</Text>
+                        <Pressable onPress={onSignOutPressed}>
+                            <Text style={styles.moreText}>  로그아웃</Text>
+                        </Pressable>
+                    </View>           
                 </View>
-                <Pressable style={styles.article} activeOpacity='0.8'>
-                    <Text style={styles.title}>기사제목입니다. 기사제목입니다. 기사제목입니다.</Text>
-                    <View style={styles.image}></View>
-                    <View style={styles.contentContainer}>
-                        <View><Text style={styles.content}>기사 요약 내용입니다. 기사 요약 내용입니다. 기사 요약 내용입니다. 기사 요약 내용입니다. 기사 요약 내용입니다. 기사 요약 내용입니다. 기사 요약 내용입니다.</Text></View>
-                        <View><Text style={styles.info}>김유나 기자</Text></View>
+                <View style={styles.artContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>내가 스크랩한 기사</Text>
                     </View>
-                </Pressable>
+                    {scrap.map(user => (
+                        <Pressable 
+                            style={styles.article} 
+                            activeOpacity='0.8'
+                            key={user.id}
+                        >
+                            <Text style={styles.title}>{user.title}</Text>
+                            <View style={styles.image} source={{uri: user.img}}/>
+                            <View style={styles.contentContainer}>
+                                <View><Text style={styles.content}>{user.article_extractive}</Text></View>
+                                <View><Text style={styles.info}>{user.writer}</Text></View>
+                            </View>
+                        </Pressable>
+                    ))}
             </View>
+            </ScrollView>
         </View>
     );
 }

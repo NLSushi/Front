@@ -21,7 +21,7 @@ const HomeScreen = () => {
             setLoading(true);
 
             const response = await axios.get(
-                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/recent'
+                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/article'
             );
 
             setNews(response.data.data);

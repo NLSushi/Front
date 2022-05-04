@@ -18,6 +18,8 @@ const DetailScreen = ({route}) => {
     const [loading, setLoading] = useState('');
     const [heart, setHeart] = useState(true);
     const [user, setUser] = useState('');
+    const [like, setLike] = useState('');
+    const [addArticle, setAddArticle] = useState('');
 
     const fetchNews = async () => {
         try {
@@ -26,7 +28,7 @@ const DetailScreen = ({route}) => {
             setLoading(true);
 
             const response = await axios.get(
-                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/recent'
+                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/article'
             );
 
             setNews(response.data.data);
@@ -61,17 +63,31 @@ const DetailScreen = ({route}) => {
             //     console.log(JSON.stringify(myJson));
             // });
 
-            const like = axios.get('url', {
-                params: {
-                    userId: user
-                }
+
+            fetch(`http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view?userId=${encodeURIComponent(user)}`, {
+                method: "GET"
             })
             .then((response) => {
-                return response;
+                return setLike(response);
             })
             .catch((error) => {
                 console.warn(error);
             }); 
+
+            // const like = axios.get(
+            //     'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
+            //     params: {
+            //         userId: user
+            //     }
+            // })
+
+            //console.warn(like)
+            
+            if(like.ok == true) {
+                console.warn("트루임")
+            } else {
+                console.warn("false 임")
+            }
 
         } catch (e) {
             Alert.alert('Error', e.message);
@@ -87,7 +103,7 @@ const DetailScreen = ({route}) => {
 
     useEffect(() => {
         fetchNews();
-        //fetchLike();
+        fetchLike();
     }, []);
 
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
@@ -121,17 +137,19 @@ const DetailScreen = ({route}) => {
             )
 
             // username 과 article id 서버로 전송
+            axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap", {
+                userId: user,
+                articleId: id
+            })
+            .then((response) => {
+                console.warn(response)
+                //setAddArticle(response.data.id);
+            })
+            .catch((response) => {
+                console.warn(response);
+            });
 
-            // var params = new URLSearchParams();
-            // params.append('userId', user);
-
-            // axios.post('url', params)
-            // .then((res) => {
-	        //     console.warn(res);
-            // })
-            // .catch((error) => {
-	        //     console.warn(error);
-            // })
+            console.warn(id)
 
         } else {
             Alert.alert(                    
@@ -141,8 +159,23 @@ const DetailScreen = ({route}) => {
                     { text: "확인" },                                       
                 ],
                 { cancelable: false }
-                // username 과 article id 서버에서 삭제
+                
             )
+
+            // username 과 article id 서버로 전송
+            axios.delete("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/unscrap", {
+                data: {
+                    userId: user,
+                    articleId: id
+                }
+            })
+            .then((response) => {
+                console.warn(response);
+            })
+            .catch((response) => {
+                console.warn(response);
+            });
+
         }
     }
 

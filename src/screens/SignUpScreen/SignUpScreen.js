@@ -31,21 +31,14 @@ const SignUpScreen = () => {
                 attributes: {email, preferred_username: username}
             });
 
-            const url = 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/signup'
-            const user = {
+            axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/signup", {
                 userId: username
-            }
-
-            axios.post(url, JSON.stringify(user), {
-                headers: {
-                "Content-Type": `application/json`,
-                },
             })
-            .then((res) => {
-                console.warn(res);
+            .then((response) => {
+                console.warn(response);
             })
-            .catch((error) => {
-                console.warn(error);
+            .catch((response) => {
+                console.warn(response);
             });
 
             navigation.navigate('ConfirmEmail');

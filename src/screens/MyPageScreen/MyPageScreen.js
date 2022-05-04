@@ -71,12 +71,8 @@ const MyPageScreen = () => {
                     <Text style={styles.logo}>NEWSUM</Text>
                     <Text style={styles.welcome}>{user}님 환영합니다!</Text>
                     <View style={styles.moreContainer}>
-                        <Pressable onPress={onAccountChangePressed}>
-                            <Text style={styles.moreText}>회원정보 변경  </Text>
-                        </Pressable>
-                        <Text>•</Text>
                         <Pressable onPress={onSignOutPressed}>
-                            <Text style={styles.moreText}>  로그아웃</Text>
+                            <Text style={styles.moreText}>로그아웃</Text>
                         </Pressable>
                     </View>           
                 </View>
@@ -84,7 +80,7 @@ const MyPageScreen = () => {
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>내가 스크랩한 기사</Text>
                     </View>
-                    {scrap.map(user => (
+                    {/* {scrap.map(user => (
                         <Pressable 
                             style={styles.article} 
                             activeOpacity='0.8'
@@ -97,7 +93,19 @@ const MyPageScreen = () => {
                                 <View><Text style={styles.info}>{user.writer}</Text></View>
                             </View>
                         </Pressable>
-                    ))}
+                    ))} */}
+                    <Pressable 
+                            style={styles.article} 
+                            activeOpacity='0.8'
+                            key={user.id}
+                        >
+                            <Text style={styles.title}>{user.title}</Text>
+                            <View style={styles.image} source={{uri: user.img}}/>
+                            <View style={styles.contentContainer}>
+                                <View><Text style={styles.content}>{user.article_extractive}</Text></View>
+                                <View><Text style={styles.info}>{user.writer}</Text></View>
+                            </View>
+                    </Pressable>
             </View>
             </ScrollView>
         </View>

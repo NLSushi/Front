@@ -1,7 +1,27 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react/cjs/react.production.min';
+
+import { Auth } from 'aws-amplify';
 
 const CustomTopbar = ({ leftText, rightText, onPressLeft, onPressRight }) => {
+
+    // const [user, setUser] = useState('')
+
+    // const checkUser = async () => {
+    //     try {
+    //         const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+    //         setUser(authUser.username);
+
+    //         console.warn(user)
+    //     } catch (e) {
+    //         setUser(null);
+    //     }
+    // };
+    
+    // useEffect(() => {
+    //     checkUser()
+    // }, []);
 
     return (
         <View style={styles.container}>

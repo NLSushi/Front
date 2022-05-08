@@ -5,9 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTopbar from '../../components/CustomTopbar';
 import CustomNews from '../../components/CustomNews/CustomNews';
 
+import axios from 'axios'; 
+
 import { Auth } from 'aws-amplify';
 
-const MyPageScreen = () => {
+const MyPageScreen = ({route}) => {
+
+    const username = route.params.user;
 
     const navigation = useNavigation();
     const [user, setUser] = useState('');
@@ -22,18 +26,20 @@ const MyPageScreen = () => {
         Auth.signOut();
     }
 
-    const onAccountChangePressed = () => {
-        console.warn('onAccountChangePressed');
-    }
+    // const onAccountChangePressed = () => {
+    //     console.warn('onAccountChangePressed');
+    // }
 
-    const checkUser = async () => {
-        try {
-            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-            setUser(authUser.username);
-        } catch (e) {
-            setUser(null);
-        }
-    };
+    // const checkUser = async () => {
+    //     try {
+    //         const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+    //         setUser(authUser.username);
+
+    //         console.warn(user)
+    //     } catch (e) {
+    //         setUser(null);
+    //     }
+    // };
 
     const fetchLike = async () => {
 
@@ -42,23 +48,50 @@ const MyPageScreen = () => {
             setScrap(null);
             setLoading(true);
 
-            const response = await axios.get(
-                'url',
-                { params: { userId: user}}
-            )
+            // const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+            // setUser(authUser.username);
 
-            setScrap(response.data.data);
+            //console.warn(username)
+
+            // axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
+            //     params: {
+            //         userId: "yuna"
+            //     }
+            // })
+            // .then((response) => {
+            //     console.warn(response.data.data)
+            //     setScrap(response.data.data)
+            // })
+            // .catch(function (error) {
+            //     console.warn(error);
+            // })
+
+            const response = await axios.get(
+                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
+                    params: {
+                        userId: "yuna"
+                    }
+                }
+            );
+
+            setScrap(response.data.data)
+            //console.warn(scrap)
 
         } catch (e) {
             Alert.alert("Error", e.message);
         }
 
+        setLoading(false)
+
     }
 
     useEffect(() => {
-        checkUser();
-        //fetchLike();
+        //checkUser();
+        fetchLike();
     }, []);
+
+    if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
+    if (!scrap) return null;
 
     return (
         <View style={styles.default}>
@@ -69,7 +102,7 @@ const MyPageScreen = () => {
             <ScrollView>
                 <View style={styles.container}>
                     <Text style={styles.logo}>NEWSUM</Text>
-                    <Text style={styles.welcome}>{user}님 환영합니다!</Text>
+                    <Text style={styles.welcome}>{username}님 환영합니다!</Text>
                     <View style={styles.moreContainer}>
                         <Pressable onPress={onSignOutPressed}>
                             <Text style={styles.moreText}>로그아웃</Text>
@@ -80,33 +113,22 @@ const MyPageScreen = () => {
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>내가 스크랩한 기사</Text>
                     </View>
-                    {/* {scrap.map(user => (
+                    {scrap.map(scrap => (
                         <Pressable 
                             style={styles.article} 
                             activeOpacity='0.8'
-                            key={user.id}
+                            key={scrap.id}
+                            onPress={function() {navigation.navigate('Detail', {id: scrap.id})}}
                         >
-                            <Text style={styles.title}>{user.title}</Text>
-                            <View style={styles.image} source={{uri: user.img}}/>
+                            <Text style={styles.title}>{scrap.title}</Text>
+                            <Image style={styles.image} source={{uri: scrap.img}}/>
                             <View style={styles.contentContainer}>
-                                <View><Text style={styles.content}>{user.article_extractive}</Text></View>
-                                <View><Text style={styles.info}>{user.writer}</Text></View>
+                                <View><Text style={styles.content}>{scrap.article_extractive}</Text></View>
+                                <View><Text style={styles.info}>{scrap.writer}</Text></View>
                             </View>
                         </Pressable>
-                    ))} */}
-                    <Pressable 
-                            style={styles.article} 
-                            activeOpacity='0.8'
-                            key={user.id}
-                        >
-                            <Text style={styles.title}>{user.title}</Text>
-                            <View style={styles.image} source={{uri: user.img}}/>
-                            <View style={styles.contentContainer}>
-                                <View><Text style={styles.content}>{user.article_extractive}</Text></View>
-                                <View><Text style={styles.info}>{user.writer}</Text></View>
-                            </View>
-                    </Pressable>
-            </View>
+                    ))}
+                </View>
             </ScrollView>
         </View>
     );
@@ -168,7 +190,8 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 4,
         borderBottomRightRadius: 4,
         paddingHorizontal: 14,
-        paddingVertical: 14
+        paddingVertical: 14,
+        marginBottom: 10
     },
     
     title: {

@@ -7,12 +7,15 @@ import CustomNews from '../../components/CustomNews/CustomNews';
 
 import axios from 'axios'; 
 
+import { Auth } from 'aws-amplify';
+
 const HomeScreen = () => {
 
     const navigation = useNavigation();
 
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState('')
 
     const fetchNews = async () => {
         try {
@@ -21,7 +24,7 @@ const HomeScreen = () => {
             setLoading(true);
 
             const response = await axios.get(
-                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/article'
+                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/recent'
             );
 
             setNews(response.data.data);
@@ -34,6 +37,19 @@ const HomeScreen = () => {
 
     }
 
+    const checkUser = async () => {
+        try {
+
+            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+            setUser(authUser.username)
+
+            //console.warn(user)
+
+        } catch (e) {
+            setUser(null);
+        }
+    }
+
     useEffect(() => {
         fetchNews();
     }, []);
@@ -42,7 +58,8 @@ const HomeScreen = () => {
     if (!news) return null;
 
     const onProfilePressed = () => {
-        navigation.navigate('MyPage');
+        checkUser()
+        navigation.navigate('MyPage', {user: user});
     }
 
     const onSearchPressed = () => {

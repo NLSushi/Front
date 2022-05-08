@@ -5,23 +5,27 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTopbar from '../../components/CustomTopbar';
 
 import axios from 'axios'; 
-import { Auth } from 'aws-amplify';
 
 import 'url-search-params-polyfill';
 
 const DetailScreen = ({route}) => {
 
     const navigation = useNavigation();
+
     const id = route.params.id;
+    const username = route.params.username;
 
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState('');
+    const [load, setLoad] = useState(false);
     const [heart, setHeart] = useState(true);
     const [user, setUser] = useState('');
     const [like, setLike] = useState('');
+    const [test, setTest] = useState(false)
     const [addArticle, setAddArticle] = useState('');
 
     const fetchNews = async () => {
+        
         try {
 
             setNews(null);
@@ -32,9 +36,6 @@ const DetailScreen = ({route}) => {
             );
 
             setNews(response.data.data);
-
-            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-            setUser(authUser.username)
             
         } catch (e) {
             Alert.alert('Error', e.message);
@@ -49,64 +50,59 @@ const DetailScreen = ({route}) => {
 
         try {
 
-            setLoading(true); 
+            setLoad(true); 
 
-            // userId가 user인 목록
-            // const like = await axios.get(
-            //     'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view',
-            //     {params: {userId: user}}
-            // )
-            // .then(function(response) {
-            //     return response;
-            // })
-            // .then(function(myJson) {
-            //     console.log(JSON.stringify(myJson));
-            // });
-
-
-            fetch(`http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view?userId=${encodeURIComponent(user)}`, {
-                method: "GET"
+            axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
+                params: {
+                    userId: "yuna"
+                }
             })
             .then((response) => {
-                return setLike(response);
+                setLike(response.data.data)
+                //console.warn(response.data.data)
             })
-            .catch((error) => {
+            .catch(function (error) {
                 console.warn(error);
-            }); 
-
-            // const like = axios.get(
-            //     'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
-            //     params: {
-            //         userId: user
-            //     }
-            // })
+            })
 
             //console.warn(like)
             
-            if(like.ok == true) {
-                console.warn("트루임")
-            } else {
-                console.warn("false 임")
-            }
 
         } catch (e) {
             Alert.alert('Error', e.message);
         }
-            
-        setLoading(false);
 
-        // console.warn(like);
+        
 
+        //console.warn(like.length)
+
+        if (like.length == 0) {
+            //console.warn("아무것도 없음")
+            setHeart(true)
+        } else {
+            for (let i = 0; i < like.length; i++) {
+                    if (like[i].id == id) {
+                        setHeart(false)
+                        //console.warn('true')
+                    } else {
+                        setHeart(true)
+                        //console.warn('false')
+                    }
+            }
+        }
+
+        setLoad(false);
         // for 문으로 접근 -> 일치하는 값 있으면 setHeart(true)
         // if (like.data.data.id === id) setHeart(false) 
     }
 
     useEffect(() => {
-        fetchNews();
         fetchLike();
+        fetchNews();
     }, []);
 
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
+    if (load) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
     if (!news) return null;
 
     const onBackPressed = () => {
@@ -120,7 +116,6 @@ const DetailScreen = ({route}) => {
     // heart 를 눌렀을 때 toggle 됨
     const toggleHeart = () => {
         setHeart(previousState => !previousState);
-        //console.warn(heart);
         alert()
     }
 
@@ -138,18 +133,15 @@ const DetailScreen = ({route}) => {
 
             // username 과 article id 서버로 전송
             axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap", {
-                userId: user,
+                userId: username,
                 articleId: id
             })
             .then((response) => {
                 console.warn(response)
-                //setAddArticle(response.data.id);
             })
             .catch((response) => {
-                console.warn(response);
+                //console.warn(response);
             });
-
-            console.warn(id)
 
         } else {
             Alert.alert(                    
@@ -165,7 +157,7 @@ const DetailScreen = ({route}) => {
             // username 과 article id 서버로 전송
             axios.delete("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/unscrap", {
                 data: {
-                    userId: user,
+                    userId: username,
                     articleId: id
                 }
             })
@@ -173,7 +165,7 @@ const DetailScreen = ({route}) => {
                 console.warn(response);
             })
             .catch((response) => {
-                console.warn(response);
+                //console.warn(response);
             });
 
         }
@@ -183,9 +175,9 @@ const DetailScreen = ({route}) => {
         <View>
             <CustomTopbar
                 leftText="❮"
-                rightText='⚪️'
+                // rightText='⚪️'
                 onPressLeft={onBackPressed}
-                onPressRight={onProfilePressed}
+                // onPressRight={onProfilePressed}
             />
 
                 <ScrollView showVerticalScrollIndicator={false}>

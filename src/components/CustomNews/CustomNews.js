@@ -1,10 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Pressable, Image, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Auth } from 'aws-amplify';
 
 const CustomNews = ({ news, category, horizontal }) => {
 
     const navigation = useNavigation();
+
+    const [username, setUsername] = useState('')
+
+    const checkUser = async () => {
+        try {
+
+            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+            setUsername(authUser.username)
+
+            //console.warn(username)
+
+        } catch (e) {
+            setUser(null);
+        }
+    }
+
+    // useEffect(() => {
+    //     checkUser();
+    // }, [username]);
 
     return (
         <ScrollView 
@@ -17,7 +37,7 @@ const CustomNews = ({ news, category, horizontal }) => {
                     key={user.id} 
                     style={styles.newsContainer}
                     activeOpacity='1' 
-                    onLongPress={function() { navigation.navigate('Detail', {id: user.id});}}
+                    onPress={function() { checkUser(); navigation.navigate('Detail', {id: user.id, username: username});}}
                 >
                     <View style={styles.companyHeader}>
                         <Text style={styles.companyText}>{user.company}</Text>

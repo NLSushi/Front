@@ -28,6 +28,10 @@ const SearchScreen = () => {
         navigation.push('SearchResult', {keyword: keyword});
     }
 
+    // const onChangeText = () => {
+    //     console.warn("바뀜")
+    // }
+
     return (
         <View style={styles.default}>
             <CustomTopbar

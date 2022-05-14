@@ -64,20 +64,11 @@ const DetailScreen = ({route}) => {
             .catch(function (error) {
                 console.warn(error);
             })
-
-            //console.warn(like)
-            
-
         } catch (e) {
             Alert.alert('Error', e.message);
         }
 
-        
-
-        //console.warn(like.length)
-
         if (like.length == 0) {
-            //console.warn("아무것도 없음")
             setHeart(true)
         } else {
             for (let i = 0; i < like.length; i++) {
@@ -92,8 +83,7 @@ const DetailScreen = ({route}) => {
         }
 
         setLoad(false);
-        // for 문으로 접근 -> 일치하는 값 있으면 setHeart(true)
-        // if (like.data.data.id === id) setHeart(false) 
+
     }
 
     useEffect(() => {
@@ -107,10 +97,6 @@ const DetailScreen = ({route}) => {
 
     const onBackPressed = () => {
         navigation.navigate('Home');
-    }
-
-    const onProfilePressed = () => {
-        navigation.navigate('MyPage');
     }
 
     // heart 를 눌렀을 때 toggle 됨
@@ -137,7 +123,7 @@ const DetailScreen = ({route}) => {
                 articleId: id
             })
             .then((response) => {
-                console.warn(response)
+                //console.warn(response)
             })
             .catch((response) => {
                 //console.warn(response);
@@ -175,11 +161,8 @@ const DetailScreen = ({route}) => {
         <View>
             <CustomTopbar
                 leftText="❮"
-                // rightText='⚪️'
                 onPressLeft={onBackPressed}
-                // onPressRight={onProfilePressed}
             />
-
                 <ScrollView showVerticalScrollIndicator={false}>
                     <Pressable onPress={toggleHeart}>
                         {heart ?  <Text style={styles.heart}>♡</Text> : <Text style={styles.heart}>♥︎</Text>}
@@ -190,13 +173,12 @@ const DetailScreen = ({route}) => {
                             <Text style={styles.info}>{user.company} • {user.writer}</Text>
                             <Text style={styles.info}>{user.date}</Text>
                             <Image style={styles.image} source={{uri: user.img}}/>
-                            <Text style={styles.hashtag}>{user.hashtag}</Text>
+                            <Text style={styles.hashtag}>#{user.article_hashtag}</Text>
                             <Text style={styles.content}>{user.article_origin}</Text>
                         </View>
                     ))}
                     <View style={{marginTop: 50}}/>
                 </ScrollView>
-
         </View>
     );
 }
@@ -206,7 +188,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         backgroundColor: '#FFFFFF'
     },
-    
     heart: {
         marginTop: 10,
         fontSize: 20,

@@ -33,6 +33,8 @@ const SearchResultScreen = ({route}) => {
 
             setSearch(response.data.data);
 
+            // console.warn(keyword)
+
         } catch (e) {
             Alert.alert("Error", e.message);
         }

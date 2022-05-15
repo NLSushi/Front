@@ -25,13 +25,22 @@ const SearchResultScreen = ({route}) => {
             setSearch(null);
             setLoading(true);
 
-            const response = await axios.get(
+            axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/search', {
+                params: {
+                    hashtag: keyword
+                }
+            })
+            .then((response) => {
+                //console.warn(response.data.data)
+                //console.warn(response.data.data)
+                setSearch(response.data.data)
+                //console.warn(autocomplete)
+            })
+            .catch(function (error) {
+                console.warn(error)
+            })
 
-                'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/recent'
-
-            );
-
-            setSearch(response.data.data);
+            //setSearch(response.data.data);
 
             // console.warn(keyword)
 
@@ -93,7 +102,7 @@ const SearchResultScreen = ({route}) => {
             <ScrollView>
                 {search.map(user => (
                     <Pressable 
-                    onLongPress={function() { navigation.navigate('Detail', {id: user.id});}} 
+                    onPress={function() { navigation.navigate('Detail', {id: user.id});}} 
                     style={styles.searchArticle} 
                     activeOpacity='0.8'
                     key={user.id}

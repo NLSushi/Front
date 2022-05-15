@@ -11,7 +11,7 @@ import axios from 'axios';
 
 const SearchScreen = () => {
 
-    const { control, handleSubmit, watch } = useForm()
+    // const { control, handleSubmit, watch } = useForm()
     const [ word, setWord ] = useState('')
     const [ autocomplete, setAutocomplete ] = useState('')
     const [ keyword, setKeyword ] = useState('')
@@ -46,16 +46,19 @@ const SearchScreen = () => {
             //console.warn(response.data.data)
             setAutocomplete(response.data.data)
             //console.warn(autocomplete)
-            
         })
         .catch(function (error) {
-            console.warn(error);
+            console.warn(error)
         })
 
-        console.warn(autocomplete)
+        //console.warn(autocomplete)
         setLoading(false)
 
     }
+
+    useEffect(() => {
+        onChangeText(word)
+    }, [word])
 
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
 
@@ -71,6 +74,7 @@ const SearchScreen = () => {
                         value={word}
                         onChangeText={onChangeText}
                         placeholder="키워드를 입력해주세요"
+                        autoFocus={true}
                     />
                 </View> 
                 <Pressable 
@@ -79,14 +83,19 @@ const SearchScreen = () => {
                 >
                     <Text>검색</Text>
                 </Pressable>
-            </View>      
-            {/* {autocomplete.map(user => (
-                <Pressable  
-                    key={user.id} 
-                >
-                    <Text>{user.tag}</Text>
-                </Pressable>
-            ))} */}
+            </View>  
+
+            <View style={styles.searchResultContainer}>
+                {autocomplete ? autocomplete.map(user => (
+                    <Pressable  
+                        key={user.id} 
+                        style={styles.searchResult}
+                        onPress={() => setWord(user.tag)}
+                    >
+                        <Text>{user.tag}</Text>
+                    </Pressable>
+                )) : <View></View>}
+            </View>
         </View>
     );
 }
@@ -102,13 +111,23 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         marginHorizontal: '6%'
     },
+    searchResultContainer: {
+        marginLeft: '6%',
+        marginRight: '21%',
+        borderRadius: 5,
+        backgroundColor: '#FFFFFF',
+    },
+    searchResult: {
+        paddingLeft: 18,
+        paddingVertical: 15,
+    },
     input: {
         backgroundColor: '#FFFFFF',
         width: '83%',
         height: 48,
         paddingLeft: 15,
         borderRadius: 5,
-        marginBottom: 18,
+        marginBottom: 5,
         alignSelf: 'center',
     },
     searchButton: {

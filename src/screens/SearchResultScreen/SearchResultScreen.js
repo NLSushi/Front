@@ -31,18 +31,11 @@ const SearchResultScreen = ({route}) => {
                 }
             })
             .then((response) => {
-                //console.warn(response.data.data)
-                //console.warn(response.data.data)
                 setSearch(response.data.data)
-                //console.warn(autocomplete)
             })
             .catch(function (error) {
                 console.warn(error)
             })
-
-            //setSearch(response.data.data);
-
-            // console.warn(keyword)
 
         } catch (e) {
             Alert.alert("Error", e.message);
@@ -68,12 +61,10 @@ const SearchResultScreen = ({route}) => {
     }
 
     const onSearchPressed = () => {
-        //console.warn(search);
         navigation.push('SearchResult', {keyword: newKeyword});
     }
 
     const onArticlePressed = () => {
-        //function () {navigation.push('Detail', {id: user.id})}
         console.warn("onArticlePressed");
     }
 

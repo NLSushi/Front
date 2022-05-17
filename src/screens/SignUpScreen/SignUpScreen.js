@@ -35,7 +35,7 @@ const SignUpScreen = () => {
                 userId: username
             })
             .then((response) => {
-                console.warn(response);
+                //console.warn(response);
             })
             .catch((response) => {
                 console.warn(response);

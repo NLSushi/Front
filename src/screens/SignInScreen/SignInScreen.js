@@ -78,10 +78,10 @@ const SignInScreen = () => {
                 onPress={handleSubmit(onSignInPressed)}
                 text="Sign In"
             />
-            <View style={styles.line}/>
-            <Pressable onPress={onSocialPressed}>
+            {/* <View style={styles.line}/> */}
+            {/* <Pressable onPress={onSocialPressed}>
                 <Image style={styles.image} source={require('../../assets/kakaoLogin.png')} />
-            </Pressable>
+            </Pressable> */}
             <View style={styles.otherButtonContainer}>
                 <Pressable onPress={onForgotPasswordPressed}>
                     <Text style={styles.otherButtonText}>비밀번호 찾기  </Text>

@@ -38,7 +38,7 @@ const ForgotPasswordScreen = () => {
         <View style={styles.default}>
             <CustomTopbar
                 rightText='X'
-                onPress={onExitPressed}
+                onPressRight={onExitPressed}
             />
             <View style={styles.headerTextContainer}>
                 <Text style={styles.headerText}>비밀번호 찾기</Text>

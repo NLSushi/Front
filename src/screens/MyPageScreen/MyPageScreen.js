@@ -48,24 +48,6 @@ const MyPageScreen = ({route}) => {
             setScrap(null);
             setLoading(true);
 
-            // const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-            // setUser(authUser.username);
-
-            //console.warn(username)
-
-            // axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
-            //     params: {
-            //         userId: "yuna"
-            //     }
-            // })
-            // .then((response) => {
-            //     console.warn(response.data.data)
-            //     setScrap(response.data.data)
-            // })
-            // .catch(function (error) {
-            //     console.warn(error);
-            // })
-
             const response = await axios.get(
                 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
                     params: {
@@ -75,7 +57,6 @@ const MyPageScreen = ({route}) => {
             );
 
             setScrap(response.data.data)
-            //console.warn(scrap)
 
         } catch (e) {
             Alert.alert("Error", e.message);
@@ -86,7 +67,6 @@ const MyPageScreen = ({route}) => {
     }
 
     useEffect(() => {
-        //checkUser();
         fetchLike();
     }, []);
 

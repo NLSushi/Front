@@ -56,25 +56,11 @@ const SearchResultScreen = ({route}) => {
         navigation.navigate('Home');
     }
 
-    const onProfilePressed = () => {
-        navigation.navigate('MyPage');
-    }
-
-    const onSearchPressed = () => {
-        navigation.push('SearchResult', {keyword: newKeyword});
-    }
-
-    const onArticlePressed = () => {
-        console.warn("onArticlePressed");
-    }
-
     return (
         <View style={styles.default}>
             <CustomTopbar
                 leftText="❮"
-                rightText='⚪️'
                 onPressLeft={onBackPressed}
-                onPressRight={onProfilePressed}
             />
             <View style={styles.searchContainer}>
                 <CustomInput
@@ -82,30 +68,30 @@ const SearchResultScreen = ({route}) => {
                     defaultValue={keyword}
                     control={control}
                     autoFocus={false}
+                    editable={false}
                 />
-                <Pressable 
-                    onPress={handleSubmit(onSearchPressed)} 
-                    style={styles.searchButton}
-                >
-                    <Text>검색</Text>
-                </Pressable>
+                <View style={styles.searchButton}>
+                    <Text style={styles.searchText}>검색</Text>
+                </View>
             </View> 
             <ScrollView>
-                {search.map(user => (
-                    <Pressable 
-                    onPress={function() { navigation.navigate('Detail', {id: user.id});}} 
-                    style={styles.searchArticle} 
-                    activeOpacity='0.8'
-                    key={user.id}
-                    >
-                        <Text style={styles.artTitle}>{user.title}</Text>
-                        <Image style={styles.artImage} source={{uri: user.img}}/>
-                        <View style={styles.artContentContainer}>
-                            <Text style={styles.artContent}>{user.article_extractive}</Text>
-                            <Text style={styles.artInfo}>{user.writer}</Text>
-                        </View>
-                    </Pressable>
-                ))}
+                {search.length == 0 ? <Text style={styles.noneText}>키워드에 해당되는 기사가 존재하지 않습니다.</Text> 
+                    : search.map(user => (
+                        <Pressable 
+                            onPress={function() { navigation.navigate('Detail', {id: user.id});}} 
+                            style={styles.searchArticle} 
+                            activeOpacity='0.8'
+                            key={user.id}
+                        >
+                            <Text style={styles.artTitle}>{user.title}</Text>
+                            <Image style={styles.artImage} source={{uri: user.img}}/>
+                            <View style={styles.artContentContainer}>
+                                <Text style={styles.artContent}>{user.article_extractive}</Text>
+                                <Text style={styles.artInfo}>{user.writer}</Text>
+                            </View>
+                        </Pressable>
+                    ))
+                }
             </ScrollView>
         </View>
     );
@@ -126,8 +112,11 @@ const styles = StyleSheet.create({
         height: 47, 
         borderRadius: 5, 
         justifyContent: 'center', 
-        backgroundColor: '#E5EBFF', 
+        backgroundColor: '#DDDDDD', 
         paddingHorizontal: 15
+    },
+    searchText: {
+        color: '#CCCCCC'
     },
     searchArticle: {
         marginBottom: 10,
@@ -136,6 +125,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 20,
         borderRadius: 4
+    },
+    noneText: {
+        marginLeft: '10%',
+        marginTop: 5,
+        color: '#EEEEEE',
+        fontSize: 14
     },
     artTitle: {
         fontSize: 14,

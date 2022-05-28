@@ -8,6 +8,8 @@ import CustomNews from '../../components/CustomNews/CustomNews';
 import axios from 'axios'; 
 
 import { Auth } from 'aws-amplify';
+import { CommonActions } from '@react-navigation/native';
+
 
 const HomeScreen = () => {
 
@@ -19,6 +21,7 @@ const HomeScreen = () => {
 
     const fetchNews = async () => {
         try {
+            //Auth.signOut();
 
             setNews(null);
             setLoading(true);
@@ -43,8 +46,6 @@ const HomeScreen = () => {
             const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
             setUser(authUser.username)
 
-            //console.warn(user)
-
         } catch (e) {
             setUser(null);
         }
@@ -59,7 +60,7 @@ const HomeScreen = () => {
 
     const onProfilePressed = () => {
         checkUser()
-        navigation.navigate('MyPage', {user: user});
+        navigation.navigate('MyPage', {user: user})
     }
 
     const onSearchPressed = () => {

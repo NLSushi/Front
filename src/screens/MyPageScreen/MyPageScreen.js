@@ -8,6 +8,8 @@ import CustomNews from '../../components/CustomNews/CustomNews';
 import axios from 'axios'; 
 
 import { Auth } from 'aws-amplify';
+import { CommonActions } from '@react-navigation/native';
+
 
 const MyPageScreen = ({route}) => {
 
@@ -25,21 +27,6 @@ const MyPageScreen = ({route}) => {
     const onSignOutPressed = () => {
         Auth.signOut();
     }
-
-    // const onAccountChangePressed = () => {
-    //     console.warn('onAccountChangePressed');
-    // }
-
-    // const checkUser = async () => {
-    //     try {
-    //         const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-    //         setUser(authUser.username);
-
-    //         console.warn(user)
-    //     } catch (e) {
-    //         setUser(null);
-    //     }
-    // };
 
     const fetchLike = async () => {
 
@@ -98,7 +85,8 @@ const MyPageScreen = ({route}) => {
                             style={styles.article} 
                             activeOpacity='0.8'
                             key={scrap.id}
-                            onPress={function() {navigation.navigate('Detail', {id: scrap.id})}}
+                            // onPress={function() {navigation.dispatch( CommonActions.navigate('Detail', {id: scrap.id, username: username}))}}
+                            onPress={function() {navigation.navigate('Detail', {id: scrap.id, username: username})}}
                         >
                             <Text style={styles.title}>{scrap.title}</Text>
                             <Image style={styles.image} source={{uri: scrap.img}}/>

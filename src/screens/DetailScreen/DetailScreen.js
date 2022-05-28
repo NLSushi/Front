@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTopbar from '../../components/CustomTopbar';
 
 import axios from 'axios'; 
-
 import 'url-search-params-polyfill';
 
 const DetailScreen = ({route}) => {
@@ -19,10 +18,7 @@ const DetailScreen = ({route}) => {
     const [loading, setLoading] = useState('');
     const [load, setLoad] = useState(false);
     const [heart, setHeart] = useState(true);
-    const [user, setUser] = useState('');
     const [like, setLike] = useState('');
-    const [test, setTest] = useState(false)
-    const [addArticle, setAddArticle] = useState('');
 
     const fetchNews = async () => {
         
@@ -54,12 +50,11 @@ const DetailScreen = ({route}) => {
 
             axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
                 params: {
-                    userId: "yuna"
+                    userId: username
                 }
             })
             .then((response) => {
                 setLike(response.data.data)
-                //console.warn(response.data.data)
             })
             .catch(function (error) {
                 console.warn(error);
@@ -68,23 +63,25 @@ const DetailScreen = ({route}) => {
             Alert.alert('Error', e.message);
         }
 
+        setLoad(false);
+
+    }
+
+    useEffect(() => {
+
         if (like.length == 0) {
             setHeart(true)
         } else {
             for (let i = 0; i < like.length; i++) {
                     if (like[i].id == id) {
                         setHeart(false)
-                        //console.warn('true')
+                        break
                     } else {
                         setHeart(true)
-                        //console.warn('false')
                     }
             }
         }
-
-        setLoad(false);
-
-    }
+    }, [like])
 
     useEffect(() => {
         fetchLike();

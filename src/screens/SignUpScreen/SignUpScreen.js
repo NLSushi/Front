@@ -20,6 +20,7 @@ const SignUpScreen = () => {
     const { control, handleSubmit, watch } = useForm();
     const pwd = watch('password');
 
+    // 회원가입 버튼을 눌렀을 경우
     const onSignUpPressed = async (data) => {
 
         const { username, password, email } = data;
@@ -31,6 +32,7 @@ const SignUpScreen = () => {
                 attributes: {email, preferred_username: username}
             });
 
+            // 서버에 username 만 전달
             axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/signup", {
                 userId: username
             })
@@ -87,7 +89,7 @@ const SignUpScreen = () => {
                 control={control}
                 placeholder="인증 가능한 이메일 주소"
                 rules={{
-                    pattern: {value: EMAIL_REGEX, message: '이메일 형식으로 입력해주세요'}
+                    pattern: { value: EMAIL_REGEX, message: '이메일 형식으로 입력해주세요' }
                 }}
             />
 

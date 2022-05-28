@@ -20,6 +20,7 @@ const DetailScreen = ({route}) => {
     const [heart, setHeart] = useState(true);
     const [like, setLike] = useState('');
 
+    // 뉴스 불러오기
     const fetchNews = async () => {
         
         try {
@@ -27,10 +28,12 @@ const DetailScreen = ({route}) => {
             setNews(null);
             setLoading(true);
 
+            // 전체 뉴스 불러오기
             const response = await axios.get(
                 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/article'
             );
 
+            // news에 response 데이터 저장
             setNews(response.data.data);
             
         } catch (e) {
@@ -48,12 +51,14 @@ const DetailScreen = ({route}) => {
 
             setLoad(true); 
 
+            // username을 기준으로 스크랩한 기사 명단 get
             axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
                 params: {
                     userId: username
                 }
             })
             .then((response) => {
+                // like에 response 데이터 저장
                 setLike(response.data.data)
             })
             .catch(function (error) {
@@ -67,12 +72,15 @@ const DetailScreen = ({route}) => {
 
     }
 
+    // like 값에 변화가 있다면 실행
     useEffect(() => {
-
+        // 스크랩한 기사가 없다면
         if (like.length == 0) {
             setHeart(true)
         } else {
+            // 전체 기사를 돌면서
             for (let i = 0; i < like.length; i++) {
+                    // 지금 기사와 스크랩한 기사의 id 가 일치한다면
                     if (like[i].id == id) {
                         setHeart(false)
                         break
@@ -83,6 +91,7 @@ const DetailScreen = ({route}) => {
         }
     }, [like])
 
+    // 처음 실행되는 function
     useEffect(() => {
         fetchLike();
         fetchNews();
@@ -102,6 +111,7 @@ const DetailScreen = ({route}) => {
         alert()
     }
 
+    // heart 를 눌렀을 때 알림 + post 또는 delete
     const alert = () => {
 
         if (heart == true) {
@@ -114,7 +124,7 @@ const DetailScreen = ({route}) => {
                 { cancelable: false }
             )
 
-            // username 과 article id 서버로 전송
+            // username 과 article id 서버로 전송 -> post
             axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap", {
                 userId: username,
                 articleId: id
@@ -137,7 +147,7 @@ const DetailScreen = ({route}) => {
                 
             )
 
-            // username 과 article id 서버로 전송
+            // username 과 article id 서버로 전송 -> delete
             axios.delete("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/unscrap", {
                 data: {
                     userId: username,
@@ -145,7 +155,7 @@ const DetailScreen = ({route}) => {
                 }
             })
             .then((response) => {
-                console.warn(response);
+                //console.warn(response);
             })
             .catch((response) => {
                 //console.warn(response);

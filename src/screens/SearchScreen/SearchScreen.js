@@ -3,59 +3,53 @@ import { Text, View, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomTopbar from '../../components/CustomTopbar';
-import CustomInput from '../../components/CustomInput';
-
-import { useForm } from 'react-hook-form';
 
 import axios from 'axios'; 
 
 const SearchScreen = () => {
 
-    // const { control, handleSubmit, watch } = useForm()
     const [ word, setWord ] = useState('')
     const [ autocomplete, setAutocomplete ] = useState('')
-    const [ keyword, setKeyword ] = useState('')
     const [ loading, setLoading ] = useState(false)
 
     const navigation = useNavigation();
 
+    // 뒤로 가기 버튼을 눌렀을 경우
     const onBackPressed = () => {
         navigation.navigate('Home');
     }
 
-    const onProfilePressed = () => {
-        navigation.navigate('MyPage');
-    }
-
+    // 검색 버튼을 눌렀을 경우
     const onSearchPressed = () => {
         navigation.push('SearchResult', {keyword: word});
     }
 
+    // 입력값이 바뀔 때마다
     const onChangeText = (value) => {
 
         setWord(value)
         setAutocomplete(null)
         setLoading(true)
 
+        // input 값을 기준으로 자동완성 결과 받아오기
         axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/autocomplete', {
             params: {
                 input: value
             }
         })
         .then((response) => {
-            //console.warn(response.data.data)
+            // 자동완성 결과값들을 autocomplete 에 저장
             setAutocomplete(response.data.data)
-            //console.warn(autocomplete)
         })
         .catch(function (error) {
             console.warn(error)
         })
 
-        //console.warn(autocomplete)
         setLoading(false)
 
     }
 
+    // 입력값이 바뀔 때마다 실행
     useEffect(() => {
         onChangeText(word)
     }, [word])

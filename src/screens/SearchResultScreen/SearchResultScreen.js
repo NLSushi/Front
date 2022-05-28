@@ -13,24 +13,26 @@ const SearchResultScreen = ({route}) => {
     const navigation = useNavigation();
     const keyword = route.params.keyword;
 
-    const { control, handleSubmit, watch } = useForm();
-    const newKeyword = watch('keyword');
+    const { control } = useForm();
 
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // 검색 결과
     const fetchSearch = async () => {
         try {
 
             setSearch(null);
             setLoading(true);
 
+            // hashtag라는 이름으로 keyword 전달
             axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/search', {
                 params: {
                     hashtag: keyword
                 }
             })
             .then((response) => {
+                // 해당 hashtag를 가지고 있는 기사 data
                 setSearch(response.data.data)
             })
             .catch(function (error) {
@@ -45,6 +47,7 @@ const SearchResultScreen = ({route}) => {
 
     }
 
+    // 처음 실행
     useEffect(() => {
         fetchSearch();
     }, []);
@@ -52,6 +55,7 @@ const SearchResultScreen = ({route}) => {
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
     if (!search) return null;
 
+    // 뒤로 가기 버튼 눌렀을 경우
     const onBackPressed = () => {
         navigation.navigate('Home');
     }
@@ -75,6 +79,7 @@ const SearchResultScreen = ({route}) => {
                 </View>
             </View> 
             <ScrollView>
+                {/* 기사가 있을 경우와 없는 경우 */}
                 {search.length == 0 ? <Text style={styles.noneText}>키워드에 해당되는 기사가 존재하지 않습니다.</Text> 
                     : search.map(user => (
                         <Pressable 

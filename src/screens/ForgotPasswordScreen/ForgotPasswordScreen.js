@@ -15,10 +15,12 @@ const ForgotPasswordScreen = () => {
 
     const { control, handleSubmit } = useForm();
 
+    // X 버튼 눌렀을 때 뒤로 가기
     const onExitPressed = () => {
         navigation.goBack();
     }
 
+    // 비밀번호 까먹었다는 버튼 눌렀을 때
     const onSendPressed = async (data) => {
         
         try {

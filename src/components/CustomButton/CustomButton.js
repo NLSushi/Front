@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
+// SignIn, SignUp 에서 사용되는 button 으로 자주 사용돼서 따로 분리
+// onPress 와 text 를 파라미터로 받아옴
 const CustomButton = ({ onPress, text }) => {
     return (
         <Pressable

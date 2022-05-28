@@ -14,6 +14,7 @@ const NewPasswordScreen = () => {
 
     const { control, handleSubmit } = useForm();
 
+    // signin으로 돌아가는 버튼
     const onBackToLoginPressed = async (data) => {
         try {
 

@@ -13,7 +13,7 @@ const SearchResultScreen = ({route}) => {
     const navigation = useNavigation();
     const keyword = route.params.keyword;
 
-    const { control } = useForm();
+    const { control } = useForm(); 
 
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);

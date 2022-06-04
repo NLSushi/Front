@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Image, Alert} from 'react-native';
+import { View, StyleSheet, Text, Pressable, ScrollView, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomTopbar from '../../components/CustomTopbar';
@@ -9,11 +9,9 @@ import { Auth } from 'aws-amplify';
 
 const MyPageScreen = ({route}) => {
 
-    //const username = route.params.user;
-
     const navigation = useNavigation();
 
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState(null)
     const [scrap, setScrap] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -53,7 +51,7 @@ const MyPageScreen = ({route}) => {
             setScrap(response.data.data)
 
         } catch (e) {
-            Alert.alert("Error", e.message);
+            //Alert.alert("Error", e.message);
         }
 
         setLoading(false)

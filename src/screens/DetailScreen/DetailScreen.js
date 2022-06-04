@@ -62,7 +62,7 @@ const DetailScreen = ({route}) => {
                 setLike(response.data.data)
             })
             .catch(function (error) {
-                console.warn(error);
+                //console.warn(error);
             })
         } catch (e) {
             Alert.alert('Error', e.message);
@@ -102,7 +102,7 @@ const DetailScreen = ({route}) => {
     if (!news) return null;
 
     const onBackPressed = () => {
-        navigation.navigate('Home');
+        navigation.goBack();
     }
 
     // heart 를 눌렀을 때 toggle 됨

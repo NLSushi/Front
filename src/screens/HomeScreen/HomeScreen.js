@@ -49,7 +49,7 @@ const HomeScreen = () => {
             setUsername(authUser.username)
 
         } catch (e) {
-            setUser(null);
+            setUsername(null);
         }
     }
 
@@ -58,12 +58,15 @@ const HomeScreen = () => {
         fetchNews();
     }, []);
 
+    useEffect(() => {
+        checkUser()
+    }, [username])
+
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
     if (!news) return null;
 
     // mypage 눌렀을 경우
     const onProfilePressed = () => {
-        checkUser()
         navigation.navigate('MyPage', {username: username})
     }
 

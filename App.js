@@ -6,8 +6,8 @@ import Navigation from './src/navigation';
 
 Amplify.configure(config);
 
+// navigation을 initial로
 const App = () => {
-  
   return (
     <View style={styles.default}>
       <Navigation />

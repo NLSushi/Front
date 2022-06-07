@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Image, Alert} from 'react-native';
+import { View, StyleSheet, Text, Pressable, ScrollView, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomTopbar from '../../components/CustomTopbar';
@@ -15,18 +15,22 @@ const HomeScreen = () => {
 
     const [news, setNews] = useState('');
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState('')
+    const [username, setUsername] = useState('')
 
+    // 가장 최근 뉴스 불러오기
     const fetchNews = async () => {
+
         try {
 
             setNews(null);
             setLoading(true);
 
+            // get method 로 불러오기
             const response = await axios.get(
                 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/recent'
             );
 
+            // news 에 response data 추가
             setNews(response.data.data);
 
         } catch (e) {
@@ -37,37 +41,38 @@ const HomeScreen = () => {
 
     }
 
+    // username 불러오기
     const checkUser = async () => {
         try {
 
             const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-            setUser(authUser.username)
-
-            //console.warn(user)
+            setUsername(authUser.username)
 
         } catch (e) {
-            setUser(null);
+            setUsername(null);
         }
     }
 
+    // 처음에 news 불러오는 함수 실행
     useEffect(() => {
         fetchNews();
     }, []);
 
+    useEffect(() => {
+        checkUser()
+    }, [username])
+
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
     if (!news) return null;
 
+    // mypage 눌렀을 경우
     const onProfilePressed = () => {
-        checkUser()
-        navigation.navigate('MyPage', {user: user});
+        navigation.navigate('MyPage', {username: username})
     }
 
+    // search bar 눌렀을 경우
     const onSearchPressed = () => {
         navigation.navigate('Search');
-    }
-
-    const onArticlePressed = () => {
-        navigation.navigate('Detail');
     }
 
     return (

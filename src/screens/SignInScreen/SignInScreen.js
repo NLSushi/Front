@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Text, View, StyleSheet, Pressable, Image } from 'react-native';
+import { Text, View, StyleSheet, Pressable } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import CustomInput from '../../components/CustomInput';
@@ -12,7 +12,7 @@ const SignInScreen = () => {
 
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
-    const { control, handleSubmit, formState: {errors} } = useForm();
+    const { control, handleSubmit } = useForm();
 
     const onSignInPressed = async (data) => {
         
@@ -36,16 +36,14 @@ const SignInScreen = () => {
         setLoading(false);
     }
 
+    // 계정이 없다면
     const onSignUpPressed = () => {
         navigation.navigate('SignUp');
     }
 
+    // 비밀번호를 까먹은 경우
     const onForgotPasswordPressed = () => {
         navigation.navigate('ForgotPassword');
-    }
-
-    const onSocialPressed = () => {
-        navigation.navigate('Social');
     }
 
     return (
@@ -78,10 +76,6 @@ const SignInScreen = () => {
                 onPress={handleSubmit(onSignInPressed)}
                 text="Sign In"
             />
-            {/* <View style={styles.line}/> */}
-            {/* <Pressable onPress={onSocialPressed}>
-                <Image style={styles.image} source={require('../../assets/kakaoLogin.png')} />
-            </Pressable> */}
             <View style={styles.otherButtonContainer}>
                 <Pressable onPress={onForgotPasswordPressed}>
                     <Text style={styles.otherButtonText}>비밀번호 찾기  </Text>

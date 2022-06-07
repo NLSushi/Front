@@ -1,30 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Image, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'aws-amplify';
 
+// HomeScreen 에서 반복적으로 사용되는 news box
 const CustomNews = ({ news, category, horizontal }) => {
 
     const navigation = useNavigation();
-
     const [username, setUsername] = useState('')
 
+    // HomeScreen에서 먼저 user check 한 후 route로 DetailScreen에 id 전달
     const checkUser = async () => {
         try {
 
             const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
             setUsername(authUser.username)
 
-            //console.warn(username)
-
         } catch (e) {
             setUser(null);
         }
     }
-
-    // useEffect(() => {
-    //     checkUser();
-    // }, [username]);
 
     return (
         <ScrollView 

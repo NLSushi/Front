@@ -1,46 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Image, Alert} from 'react-native';
+import { View, StyleSheet, Text, Pressable, ScrollView, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomTopbar from '../../components/CustomTopbar';
-import CustomNews from '../../components/CustomNews/CustomNews';
 
 import axios from 'axios'; 
-
 import { Auth } from 'aws-amplify';
 
 const MyPageScreen = ({route}) => {
 
-    const username = route.params.user;
-
     const navigation = useNavigation();
-    const [user, setUser] = useState('');
+
+    const [username, setUsername] = useState(null)
     const [scrap, setScrap] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // 뒤로 가기 버튼 눌렀을 경우
     const onBackPressed = () => {
         navigation.goBack();
     }
 
+    // 로그아웃 버튼 눌렀을 경우
     const onSignOutPressed = () => {
         Auth.signOut();
     }
 
-    // const onAccountChangePressed = () => {
-    //     console.warn('onAccountChangePressed');
-    // }
+    // user 에 route 된 값 넣기
+    const fetchUser = async () => {
+        setUsername(route.params.username)
+    }
 
-    // const checkUser = async () => {
-    //     try {
-    //         const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-    //         setUser(authUser.username);
-
-    //         console.warn(user)
-    //     } catch (e) {
-    //         setUser(null);
-    //     }
-    // };
-
+    // 스크랩 여부 확인
     const fetchLike = async () => {
 
         try {
@@ -48,6 +38,7 @@ const MyPageScreen = ({route}) => {
             setScrap(null);
             setLoading(true);
 
+            // username을 기준으로 스크랩된 기사들 불러오기
             const response = await axios.get(
                 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
                     params: {
@@ -56,19 +47,25 @@ const MyPageScreen = ({route}) => {
                 }
             );
 
+            // scrap 에 response 데이터 넣기
             setScrap(response.data.data)
 
         } catch (e) {
-            Alert.alert("Error", e.message);
+            //Alert.alert("Error", e.message);
         }
 
         setLoading(false)
 
     }
 
+    // 처음에 user 확인
     useEffect(() => {
-        fetchLike();
+        fetchUser();
     }, []);
+
+    useEffect(() => {
+        fetchLike()
+    }, [username]);
 
     if (loading) return <View style={[styles.default]}><Text style={{margin: 25, color: '#FFFFFF', fontSize: 20}}>로딩 중..</Text></View>;
     if (!scrap) return null;
@@ -98,7 +95,7 @@ const MyPageScreen = ({route}) => {
                             style={styles.article} 
                             activeOpacity='0.8'
                             key={scrap.id}
-                            onPress={function() {navigation.navigate('Detail', {id: scrap.id})}}
+                            onPress={function() {navigation.navigate('Detail', {id: scrap.id, username: username})}}
                         >
                             <Text style={styles.title}>{scrap.title}</Text>
                             <Image style={styles.image} source={{uri: scrap.img}}/>

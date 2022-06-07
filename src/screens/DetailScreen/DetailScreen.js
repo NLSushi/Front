@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTopbar from '../../components/CustomTopbar';
 
 import axios from 'axios'; 
-
 import 'url-search-params-polyfill';
 
 const DetailScreen = ({route}) => {
@@ -19,11 +18,9 @@ const DetailScreen = ({route}) => {
     const [loading, setLoading] = useState('');
     const [load, setLoad] = useState(false);
     const [heart, setHeart] = useState(true);
-    const [user, setUser] = useState('');
     const [like, setLike] = useState('');
-    const [test, setTest] = useState(false)
-    const [addArticle, setAddArticle] = useState('');
 
+    // 뉴스 불러오기
     const fetchNews = async () => {
         
         try {
@@ -31,10 +28,12 @@ const DetailScreen = ({route}) => {
             setNews(null);
             setLoading(true);
 
+            // 전체 뉴스 불러오기
             const response = await axios.get(
                 'http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/article'
             );
 
+            // news에 response 데이터 저장
             setNews(response.data.data);
             
         } catch (e) {
@@ -52,40 +51,47 @@ const DetailScreen = ({route}) => {
 
             setLoad(true); 
 
+            // username을 기준으로 스크랩한 기사 명단 get
             axios.get('http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap/view', {
                 params: {
-                    userId: "yuna"
+                    userId: username
                 }
             })
             .then((response) => {
+                // like에 response 데이터 저장
                 setLike(response.data.data)
-                //console.warn(response.data.data)
             })
             .catch(function (error) {
-                console.warn(error);
+                //console.warn(error);
             })
         } catch (e) {
             Alert.alert('Error', e.message);
-        }
-
-        if (like.length == 0) {
-            setHeart(true)
-        } else {
-            for (let i = 0; i < like.length; i++) {
-                    if (like[i].id == id) {
-                        setHeart(false)
-                        //console.warn('true')
-                    } else {
-                        setHeart(true)
-                        //console.warn('false')
-                    }
-            }
         }
 
         setLoad(false);
 
     }
 
+    // like 값에 변화가 있다면 실행
+    useEffect(() => {
+        // 스크랩한 기사가 없다면
+        if (like.length == 0) {
+            setHeart(true)
+        } else {
+            // 전체 기사를 돌면서
+            for (let i = 0; i < like.length; i++) {
+                    // 지금 기사와 스크랩한 기사의 id 가 일치한다면
+                    if (like[i].id == id) {
+                        setHeart(false)
+                        break
+                    } else {
+                        setHeart(true)
+                    }
+            }
+        }
+    }, [like])
+
+    // 처음 실행되는 function
     useEffect(() => {
         fetchLike();
         fetchNews();
@@ -96,7 +102,7 @@ const DetailScreen = ({route}) => {
     if (!news) return null;
 
     const onBackPressed = () => {
-        navigation.navigate('Home');
+        navigation.goBack();
     }
 
     // heart 를 눌렀을 때 toggle 됨
@@ -105,6 +111,7 @@ const DetailScreen = ({route}) => {
         alert()
     }
 
+    // heart 를 눌렀을 때 알림 + post 또는 delete
     const alert = () => {
 
         if (heart == true) {
@@ -117,7 +124,7 @@ const DetailScreen = ({route}) => {
                 { cancelable: false }
             )
 
-            // username 과 article id 서버로 전송
+            // username 과 article id 서버로 전송 -> post
             axios.post("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/scrap", {
                 userId: username,
                 articleId: id
@@ -140,7 +147,7 @@ const DetailScreen = ({route}) => {
                 
             )
 
-            // username 과 article id 서버로 전송
+            // username 과 article id 서버로 전송 -> delete
             axios.delete("http://ec2-3-39-14-90.ap-northeast-2.compute.amazonaws.com:8081/api/unscrap", {
                 data: {
                     userId: username,
@@ -148,7 +155,7 @@ const DetailScreen = ({route}) => {
                 }
             })
             .then((response) => {
-                console.warn(response);
+                //console.warn(response);
             })
             .catch((response) => {
                 //console.warn(response);

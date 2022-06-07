@@ -14,6 +14,7 @@ const ConfirmEmailScreen = () => {
 
     const { control, handleSubmit } = useForm();
 
+    // username 과 인증코드 입력 후 button을 누르면
     const onConfirmPressed = async (data) => {
 
         try {
@@ -28,6 +29,7 @@ const ConfirmEmailScreen = () => {
 
     }
 
+    // 인증코드 재전송 버튼을 눌렀다면
     const onResendPressed = async () => {
 
         try {
